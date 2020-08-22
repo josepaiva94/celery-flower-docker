@@ -1,14 +1,14 @@
 import os
 
-AMPQ_ADMIN_USERNAME = os.getenv('AMQP_ADMIN_USERNAME', 'user')
-AMPQ_ADMIN_PASSWORD = os.getenv('AMQP_ADMIN_PASSWORD', 'password')
+AMQP_ADMIN_USERNAME = os.getenv('AMQP_ADMIN_USERNAME', 'user')
+AMQP_ADMIN_PASSWORD = os.getenv('AMQP_ADMIN_PASSWORD', 'password')
 AMQP_ADMIN_HOST = os.getenv('AMQP_ADMIN_HOST', 'localhost')
 AMQP_ADMIN_PORT = int(os.getenv('AMQP_ADMIN_PORT', '15672'))
 
 DEFAULT_BROKER_API = 'http://%s:%s@%s:%d/api/' \
                      % (
-                         AMPQ_ADMIN_USERNAME,
-                         AMPQ_ADMIN_PASSWORD,
+                         AMQP_ADMIN_USERNAME,
+                         AMQP_ADMIN_PASSWORD,
                          AMQP_ADMIN_HOST,
                          AMQP_ADMIN_PORT
                      )
