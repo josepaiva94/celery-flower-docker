@@ -12,7 +12,7 @@ sudo docker run -it --rm --name flower -p 5555:5555 jcpaiva/celery-flower
 
 ## Access Flower
 
-To access flower go to url: [http://localhost:5555](http://172.17.42.1:5555).
+To access flower go to url: [http://localhost:5555](http://localhost:5555).
 The default credentials for the flower instance is username:root  password:changeit.
 (It is highly recommended to change the default credentials. See run configuration.)
 
