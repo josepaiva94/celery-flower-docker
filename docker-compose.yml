@@ -1,8 +1,4 @@
-version: '2'
-
-networks:
-  local:
-    driver: 'bridge'
+version: '3.7'
 
 services:
   flower:
@@ -13,21 +9,33 @@ services:
           - flower.local
     environment:
       ETCD_HOST: 'etcd.local'
+      FLOWER_USERNAME: 'root'
+      FLOWER_PASSWORD: 'changeit'
       AMQP_HOST: 'rabbitmq.local'
+      AMQP_PORT: 5672
+      AMQP_USERNAME: 'user'
+      AMQP_PASSWORD: 'password'
       AMQP_ADMIN_HOST: 'rabbitmq.local'
-      DISCOVER_RABBITMQ: 'false'
+      AMQP_ADMIN_PORT: 15672
+      AMQP_ADMIN_USERNAME: 'user'
+      AMQP_ADMIN_PASSWORD: 'password'
     ports:
-      - 5555
-
+      - '5555:5555'
     depends_on:
       - etcd
       - rabbitmq
     restart: always
     volumes:
-      - ".:/opt/celery-flower"
+      - '.:/opt/celery-flower'
 
   rabbitmq:
-    image: 'rabbitmq:3.6'
+    image: 'rabbitmq:3-management-alpine'
+    environment:
+      - RABBITMQ_DEFAULT_USER=user
+      - RABBITMQ_DEFAULT_PASS=password
+    ports:
+      - '5672:5672'
+      - '15672:15672'
     networks:
       local:
         aliases:
@@ -35,20 +43,22 @@ services:
 
   etcd:
     image: 'quay.io/coreos/etcd'
-    command: [
-      '-name', 'etcd0',
-      '-advertise-client-urls','http://etcd.local:2379,http://etcd.local:4001',
-      '-listen-client-urls', 'http://0.0.0.0:2379,http://0.0.0.0:4001',
-      '-initial-advertise-peer-urls', 'http://etcd.local:2380',
-      '-listen-peer-urls', 'http://0.0.0.0:2380',
-      '-initial-cluster-token', 'etcd-cluster-1',
-      '-initial-cluster', 'etcd0=http://etcd.local:2380',
-      '-initial-cluster-state', 'new',
-    ]
-
+    environment:
+      - ETCD_NAME=etcd0
+      - ETCD_ADVERTISE_CLIENT_URLS=http://etcd.local:2379,http://etcd.local:4001
+      - ETCD_LISTEN_CLIENT_URLS=http://0.0.0.0:2379,http://0.0.0.0:4001
+      - ETCD_INITIAL_ADVERTISE_PEER_URLS=http://etcd.local:2380
+      - ETCD_LISTEN_PEER_URLS=http://0.0.0.0:2380
+      - ETCD_INITIAL_CLUSTER_TOKEN=etcd-cluster-1
+      - ETCD_INITIAL_CLUSTER=etcd0=http://etcd.local:2380
+      - ETCD_INITIAL_CLUSTER_STATE=new
     networks:
       local:
         aliases:
           - etcd.local
     volumes:
-      - /usr/share/ca-certificates/:/etc/ssl/certs
+      - /usr/share/ca-certificates:/etc/ssl/certs
+
+networks:
+  local:
+    driver: 'bridge'

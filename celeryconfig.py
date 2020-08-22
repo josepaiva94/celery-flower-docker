@@ -1,7 +1,8 @@
 import os
-AMQP_USERNAME = os.getenv('AMQP_USERNAME', 'guest')
-AMQP_PASSWORD = os.getenv('AMQP_PASSWORD', 'guest')
-AMQP_HOST = os.getenv('AMQP_HOST', '172.17.42.1')
+
+AMQP_USERNAME = os.getenv('AMQP_USERNAME', 'user')
+AMQP_PASSWORD = os.getenv('AMQP_PASSWORD', 'password')
+AMQP_HOST = os.getenv('AMQP_HOST', 'localhost')
 AMQP_PORT = int(os.getenv('AMQP_PORT', '5672'))
 
 DEFAULT_BROKER_URL = [
